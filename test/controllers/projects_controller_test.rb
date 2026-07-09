@@ -1,23 +1,38 @@
 require "test_helper"
 
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get projects_index_url
-    assert_response :success
+  setup do
+    @client = Client.create!(
+      name: "Test Client",
+      email: "test@example.com",
+      company: "Test Company",
+      phone: "123-456-7890",
+      notes: "Test notes"
+    )
+
+    @project = @client.projects.create!(
+      name: "Test Project",
+      status: "Active"
+    )
   end
 
-  test "should get show" do
-    get projects_show_url
+  test "should get index" do
+    get client_projects_url(@client)
     assert_response :success
   end
 
   test "should get new" do
-    get projects_new_url
+    get new_client_project_url(@client)
+    assert_response :success
+  end
+
+  test "should get show" do
+    get client_project_url(@client, @project)
     assert_response :success
   end
 
   test "should get edit" do
-    get projects_edit_url
+    get edit_client_project_url(@client, @project)
     assert_response :success
   end
 end
