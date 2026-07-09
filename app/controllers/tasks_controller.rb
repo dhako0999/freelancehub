@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :set_client
   before_action :set_project
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @tasks = @project.tasks.order(created_at: :desc)
@@ -59,5 +59,3 @@ class TasksController < ApplicationController
     params.require(:task).permit(:title, :status, :priority, :due_date, :description)
   end
 end
-
-

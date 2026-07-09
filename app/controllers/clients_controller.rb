@@ -9,7 +9,7 @@ class ClientsController < ApplicationController
       else
         Client.all
       end
-  
+
     @pagy, @clients = pagy(:offset, clients_scope.order(:name), limit: 1)
   end
 
@@ -28,7 +28,7 @@ class ClientsController < ApplicationController
     if @client.save
       redirect_to clients_path, notice: "Client was successfully created."
     else
-      render :new, status: :unprocessable_entity  
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -42,9 +42,9 @@ class ClientsController < ApplicationController
      if @client.update(client_params)
        redirect_to client_path(@client), notice: "Client was successfully updated."
      else
-       render :edit, status: :unprocessable_entity  
+       render :edit, status: :unprocessable_entity
      end
-  end   
+  end
 
   def destroy
       @client = Client.find(params[:id])
@@ -52,10 +52,10 @@ class ClientsController < ApplicationController
       @client.destroy
       redirect_to clients_path, notice: "Client was successfully deleted."
   end
-       
+
   private
 
   def client_params
     params.require(:client).permit(:name, :email, :company, :phone, :notes)
-  end  
+  end
 end
