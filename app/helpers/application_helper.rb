@@ -1,15 +1,15 @@
 module ApplicationHelper
     def status_badge(status)
       classes = case status
-      when "Completed"
+                when "Completed"
                   "bg-emerald-100 text-emerald-800 ring-emerald-200"
-      when "In Progress"
+                when "In Progress"
                   "bg-blue-100 text-blue-800 ring-blue-200"
-      when "Blocked"
+                when "Blocked"
                   "bg-red-100 text-red-800 ring-red-200"
-      else
+                else
                   "bg-slate-100 text-slate-800 ring-slate-200"
-      end
+                end
 
       content_tag(:span, status, class: "rounded-full px-3 py-1 text-sm font-semibold ring-1 #{classes}")
     end
