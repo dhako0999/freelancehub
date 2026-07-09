@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one
+  name: MyString
+  status: MyString
+  start_date: 2026-07-05
+  deadline: 2026-07-05
+  budget: 9.99
+  description: MyText
+
+two:
+  client: two
+  name: MyString
+  status: MyString
+  start_date: 2026-07-05
+  deadline: 2026-07-05
+  budget: 9.99
+  description: MyText

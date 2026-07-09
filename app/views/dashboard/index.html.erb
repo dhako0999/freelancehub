@@ -1,0 +1,95 @@
+<div class="space-y-8">
+  <div>
+    <h1 class="text-3xl font-bold text-slate-900">Dashboard</h1>
+    <p class="mt-2 text-slate-600">
+      Overview of your clients, projects, and tasks.
+    </p>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-semibold text-slate-500">Clients</p>
+      <p class="mt-2 text-3xl font-bold text-slate-900"><%= @total_clients %></p>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-semibold text-slate-500">Projects</p>
+      <p class="mt-2 text-3xl font-bold text-slate-900"><%= @total_projects %></p>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-semibold text-slate-500">Open Tasks</p>
+      <p class="mt-2 text-3xl font-bold text-slate-900"><%= @open_tasks %></p>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-semibold text-slate-500">Completed Tasks</p>
+      <p class="mt-2 text-3xl font-bold text-slate-900"><%= @completed_tasks %></p>
+    </div>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="rounded-xl border border-red-200 bg-red-50 p-5">
+      <p class="text-sm font-semibold text-red-700">Overdue Tasks</p>
+      <p class="mt-2 text-3xl font-bold text-red-900"><%= @overdue_tasks %></p>
+    </div>
+
+    <div class="rounded-xl border border-amber-200 bg-amber-50 p-5">
+      <p class="text-sm font-semibold text-amber-700">Due Soon</p>
+      <p class="mt-2 text-3xl font-bold text-amber-900"><%= @due_soon_tasks %></p>
+    </div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-3">
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900">Recent Clients</h2>
+
+      <div class="mt-4 space-y-3">
+        <% @recent_clients.each do |client| %>
+          <div class="rounded-lg bg-slate-50 p-3">
+            <%= link_to client.name, client_path(client), class: "font-semibold text-slate-900 hover:text-emerald-700" %>
+            <p class="text-sm text-slate-600"><%= client.company %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900">Recent Projects</h2>
+
+      <div class="mt-4 space-y-3">
+        <% @recent_projects.each do |project| %>
+          <div class="rounded-lg bg-slate-50 p-3">
+            <%= link_to project.name,
+                  client_project_path(project.client, project),
+                  class: "font-semibold text-slate-900 hover:text-emerald-700" %>
+            <p class="text-sm text-slate-600"><%= project.client.name %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900">Recent Tasks</h2>
+
+      <div class="mt-4 space-y-3">
+        <% @recent_tasks.each do |task| %>
+          <div class="rounded-lg bg-slate-50 p-3">
+            <%= link_to task.title,
+                  client_project_task_path(task.project.client, task.project, task),
+                  class: "font-semibold text-slate-900 hover:text-emerald-700" %>
+
+            <div class="mt-2 flex flex-wrap gap-2">
+              <%= status_badge(task.status) %>
+              <%= priority_badge(task.priority) %>
+            </div>
+
+            <p class="mt-2 text-sm text-slate-600">
+              <%= task.project.name %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div> 

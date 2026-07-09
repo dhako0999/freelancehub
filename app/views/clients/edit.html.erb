@@ -1,0 +1,9 @@
+<div class="mx-auto max-w-3xl rounded-xl bg-white border border-slate-200 p-5 shadow-md">
+  <div class="mb-6 text-center justify-between">
+    <h1 class="text-3xl font-bold text-slate-900"><%= @client.name %></h1>
+
+    <%= link_to "Back", client_path(@client.id), class: "font-semibold text-emerald-700 hover:text-emerald-900" %>
+  </div>  
+
+  <%= render "form", client: @client %>
+</div>  

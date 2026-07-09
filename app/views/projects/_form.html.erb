@@ -1,0 +1,34 @@
+<%= render "shared/errors", object: project %>
+<%= form_with model: [client, project], local: true do |form| %>
+   <div class="mb-5">
+    <%= form.label :name, class: "mb-2 block font-semibold text-slate-700" %>
+    <%= form.text_field :name, class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none" %>
+   </div>
+
+   <div class="mb-5">
+    <%= form.label :status, class: "mb-2 block font-semibold text-slate-700" %>
+    <%= form.select :status, ["Planning", "Active", "Completed", "Paused"], {}, class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none" %>
+   </div>
+
+   <div class="mb-5">
+    <%= form.label :start_date, class: "mb-2 block font-semibold text-slate-700"%>   
+    <%= form.date_field :start_date, class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none" %>   
+   </div>
+
+   <div class="mb-5">
+   <%= form.label :deadline, class: "mb-2 block font-semibold text-slate-700"%>
+   <%= form.date_field :deadline, class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none" %>
+   </div>
+
+   <div class="mb-5">
+    <%= form.label :budget, class: "mb-2 block font-semibold text-slate-700"%>
+    <%= form.number_field :budget, step: 0.01, class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none" %>
+   </div>
+
+   <div class="mb-6">
+    <%= form.label :description, class: "mb-2 block font-semibold text-slate-700" %>
+    <%= form.text_area :description, class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none resize-none" %>
+   </div> 
+
+   <%= form.submit class: "rounded-lg bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700" %>
+<% end %>

@@ -1,0 +1,12 @@
+<div class="mx-auto max-w-3xl rounded-lg bg-white p-8 shadow-md">
+  <div class="mb-6 flex items-center justify-between">
+    <div>
+      <p class="text-sm font-semibold text-emerald-700"><%= @client.name %></p>
+      <h1 class="text-3xl font-bold text-slate-900">Edit Project</h1>
+    </div>  
+
+    <%= link_to "Back to Project", client_project_path(@client, @project), class: "font-semibold text-emerald-700 hover:text-emerald-900" %>
+  </div>  
+
+  <%= render "form", project: @project, client: @client %>
+</div>  

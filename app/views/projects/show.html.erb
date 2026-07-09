@@ -1,0 +1,198 @@
+<div class="mx-auto max-w-4xl bg-white rounded-lg p-8 shadow-md">
+  <div class="mb-8 flex items-center justify-between">
+    <div>
+      <p class="text-sm font-semibold text-emerald-700">
+        <%= @client.name %>
+      </p>  
+
+      <h1 class="text-3xl font-bold text-slate-900">
+        <%= @project.name %>
+      </h1>  
+    </div>  
+
+    <%= link_to "Back to Projects",
+      client_projects_path(@client),
+      class: "font-semibold text-emerald-700 hover:text-emerald-900" %>
+  </div>  
+
+  <div class="space-y-6">
+    <div>
+        <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Status
+        </p> 
+
+        <p class="mt-1 text-slate-900">
+          <%= @project.status %>
+        </p>  
+    </div> 
+    
+    <div>
+        <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Start Date
+        </p>  
+        <p class="mt-1 text-slate-900">
+          <%= @project.start_date || "Not specified" %>
+        </p>   
+    </div>  
+
+    <div>
+        <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Deadline
+        </p>
+
+        <p class="mt-1 text-slate-900">
+          <%= @project.deadline || "Not specified" %>
+        </p>  
+    </div> 
+    
+    <div>
+        <p class="text-sm font-semibold text-slate-500">
+          Budget
+        </p> 
+        <p class="mt-1 text-slate-900">
+          <%= @project.budget.present? ? number_to_currency(@project.budget) : "Not specified" %>
+        </p>   
+    </div>  
+
+    <div>
+        <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Description
+        </p> 
+        
+        <p class="mt-1 whitespace-pre-line text-slate-900">
+          <%= @project.description %>
+        </p>  
+    </div>  
+  </div>  
+
+  <div class="mt-8 flex gap-4">
+    <%= link_to "Edit Project", 
+         edit_client_project_path(@client, @project),
+         class: "rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700"
+        %>
+    <%= button_to "Delete Project",
+        client_project_path(@client, @project),
+        method: :delete,
+        data: { turbo_confirm: "Are you sure you want to delete this project?" },
+        class: "rounded-lg border bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700"     
+        %>    
+  </div>   
+
+  <div class="mt-10 border-t border-slate-200 pt-8">
+  <div class="mb-6 flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900">Tasks</h2>
+      <p class="mt-1 text-slate-600">Track work for this project.</p>
+    </div>
+
+    <div class="flex gap-3">
+      <%= link_to "Add Task",
+          new_client_project_task_path(@client, @project),
+          class: "rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700" %>
+
+      <%= link_to "View all Tasks",
+          client_project_tasks_path(@client, @project),
+          class: "rounded-lg border border-slate-200 px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50" %>     
+    </div>  
+     
+  </div>
+
+  <div class="mb-6 grid gap-3 sm:grid-cols-3">
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <p class="text-sm font-semibold text-slate-500">Total Tasks</p>
+      <p class="mt-2 text-2xl font-bold text-slate-900"><%= @total_tasks %></p>
+    </div>  
+
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <p class="text-sm font-semibold text-slate-500">Completed</p>
+      <p class="mt-2 text-2xl font-bold text-slate-900"><%= @completed_tasks %></p>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <p class="text-sm font-semibold text-slate-500">Remaining</p>
+      <p class="mt-2 text-2xl font-bold text-slate-900"><%= @remaining_tasks %></p>
+    </div>  
+
+  </div>
+
+  <div class="mt-2 mb-6 rounded-xl border border-slate-200 bg-white p-4">
+    <div class="mb-2 flex items-center justify-between">
+      <p class="text-sm font-semibold text-slate-600">Project Progress</p>
+      <p class="text-sm font-bold text-slate-900"><%= @progress_percentage %></p>
+    </div>  
+
+    <div class="h-3 overflow-hidden rounded-full bg-slate-200">
+      <div
+        class="h-full rounded-full bg-emerald-600"
+        style="width: <%= @progress_percentage %>%">
+      </div>
+    </div>
+
+    <p class="mt-2 text-sm text-slate-600">
+      <%= @completed_tasks %> of <%= @total_tasks %> tasks completed
+    </p>  
+
+  </div>  
+
+  <% if @project.tasks.any? %>
+    <div class="space-y-3">
+      <% @project.tasks.order(created_at: :desc).each do |task| %>
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-semibold text-slate-900">
+                <%= link_to task.title,
+                      client_project_task_path(@client, @project, task),
+                      class: "hover:text-emerald-700" %>
+              </h3>
+
+              <div class="mt-2 flex flex-wrap gap-2 text-sm">
+                <span class="rounded-full bg-white px-3 py-2 font-medium text-slate-700 ring-1 ring-slate-200">
+                  Status: <%= status_badge(task.status) %>
+                </span>  
+
+                <span class="rounded-full bg-white px-3 py-2 font-medium text-slate-700 ring-1 ring-slate-200">
+                  Priority: <%= priority_badge(task.priority) %>
+                </span>  
+
+                <span class="rounded-full bg-white px-3 py-2 font-medium text-slate-700 ring-1 ring-slate-200">
+                  Due: <%= task.due_date || "No due date" %>
+                </span>  
+
+                <% if overdue_task?(task) %>
+                  <span class="rounded-full bg-red-100 px-3 py-2 font-semibold text-red-800 ring-1 ring-red-200">
+                    Overdue
+                  </span>  
+                  <% elsif task_due_soon?(task) %>
+                    <span class="rounded-full bg-amber-100 px-3 py-2 font-semibold text-amber-800 ring-1 ring-amber-200">
+                      Due Soon
+                    </span>
+                  <% end %>
+
+              </div>  
+
+              <% if task.description.present? %>
+               <p class="mt-3 text-sm text-slate-600">
+                <%= truncate(task.description, length: 120) %>
+               </p> 
+              <% end %>
+            </div>
+
+            <%= link_to "View",
+                  client_project_task_path(@client, @project, task),
+                  class: "font-semibold text-emerald-700 hover:text-emerald-900" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+      <h3 class="text-lg font-semibold text-slate-900">No tasks yet</h3>
+      <p class="mt-2 text-slate-600">Create the first task for this project.</p>
+    </div>
+
+    <%= link_to "Add first task",
+        new_client_project_task_path(@client, @project),
+        class: "mt-5 inline-block rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700" %>
+  <% end %>
+</div> 

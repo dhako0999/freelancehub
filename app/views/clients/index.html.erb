@@ -1,0 +1,97 @@
+<div class="space-y-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">Clients</h1>
+      <p class="mt-2 text-slate-600">Manage your freelance clients and CRM contacts.</p>
+    </div>
+
+    <%= link_to "Add Client", new_client_path, class: "rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700" %>
+  </div>
+
+  <%= form_with url: clients_path, method: :get, local: true, class: "mb-6 flex gap-3" do |form| %>
+      <%= form.text_field :search,
+            value: params[:search],
+            placeholder: "Search by name, company, or email...",
+            class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none" %>
+
+      <%= form.submit "Search",
+            class: "rounded-lg bg-emerald-600 px-5 py-2 font-semibold text-white hover:bg-emerald-700" %>
+
+      <% if params[:search].present? %>
+        <%= link_to "Clear",
+              clients_path,
+              class: "rounded-lg border border-slate-300 px-5 py-2 font-semibold text-slate-700 hover:bg-slate-50" %>
+      <% end %>
+  <% end %>
+
+  
+  <% if @clients.any? %>
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <table class="w-full text-left">
+        <thead class="bg-slate-100 text-sm uppercase text-slate-600">
+          <tr>
+            <th class="px-6 py-3">Name</th>
+            <th class="px-6 py-3">Company</th>
+            <th class="px-6 py-3">Email</th>
+            <th class="px-6 py-3">Phone</th>
+            <th class="px-6 py-3">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-200">
+          <% @clients.each do |client| %>
+            <tr class="hover:bg-slate-50">
+              <td class="px-6 py-4 font-medium text-slate-900">
+                <%= client.name %>
+              </td>
+
+              <td class="px-6 py-4 text-slate-700">
+                <%= client.company %>
+              </td>
+
+              <td class="px-6 py-4 text-slate-700">
+                <%= client.email %>
+              </td>
+
+              <td class="px-6 py-4 text-slate-700">
+                <%= client.phone %>
+              </td>
+
+              <td class="px-6 py-4">
+                <%= link_to "View", client_path(client), class: "font-semibold text-emerald-700 hover:text-emerald-900" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    
+    <% if @pagy.pages > 1 %>
+        <div class="mt-8 flex justify-center gap-3">
+          <% if @pagy.page > 1 %>
+            <%= link_to "Previous",
+                  clients_path(page: @pagy.page - 1, search: params[:search]),
+                  class: "rounded-lg border border-slate-300 px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50" %>
+          <% end %>
+
+          <span class="px-4 py-2 text-slate-700">
+            Page <%= @pagy.page %> of <%= @pagy.pages %>
+          </span>
+
+          <% if @pagy.page < @pagy.pages %>
+            <%= link_to "Next",
+                  clients_path(page: @pagy.page + 1, search: params[:search]),
+                  class: "rounded-lg border border-slate-300 px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50" %>
+          <% end %>
+        </div>
+      <% end %>
+  <% else %>
+    <div class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center">
+      <h2 class="text-xl font-semibold text-slate-900">No clients yet</h2>
+      <p class="mt-2 text-slate-600">Add your first client to start building your CRM.</p>
+
+      <%= link_to "Add your first client", new_client_path, class: "mt-6 inline-block rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700" %>
+    </div>
+  <% end %>
+</div>
