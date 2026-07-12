@@ -32,7 +32,13 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    if @project.update(project_params)
+    new_files = project_params[:files]
+    project_attributes = project_params.except(:files)
+
+    @project.assign_attributes(project_attributes)
+    @project.files.attach(new_files) if new_files.present?
+
+    if @project.save
       redirect_to client_project_path(@client, @project), notice: "Project was successfully updated."
     else
       render :edit, status: :unprocessable_entity
@@ -56,6 +62,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name, :status, :start_date, :deadline, :budget, :description)
+    params.require(:project).permit(:name, :status, :start_date, :deadline, :budget, :description, files: [])
   end
 end

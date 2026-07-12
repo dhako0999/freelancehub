@@ -1,0 +1,17 @@
+Task Due Soon
+
+Hello <%= @client.name %>
+
+This is a reminder that the following task for <%= @project.name %> is due soon.
+
+Task: <%= @task.title %>
+Status: <%= @task.status.humanize %>
+Priority: <%= @task.priority.humanize %>
+Due Date: <%= @task.due_date&.strftime("%B %-d, %Y") || "Not specified" %>
+
+<% if @task.description.present? %>
+Description:
+<%= @task.description %>
+<% end %>
+
+FreelanceHub

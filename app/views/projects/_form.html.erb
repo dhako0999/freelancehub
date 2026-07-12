@@ -25,10 +25,20 @@
     <%= form.number_field :budget, step: 0.01, class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none" %>
    </div>
 
-   <div class="mb-6">
+   <div class="mb-5">
     <%= form.label :description, class: "mb-2 block font-semibold text-slate-700" %>
     <%= form.text_area :description, class: "w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-emerald-500 focus:outline-none resize-none" %>
    </div> 
+
+   <div class="mb-6">
+      <%= form.label :files, class: "mb-2 block font-semibold text-slate-700" %>
+      <%= form.file_field :files, multiple: true, accept: ".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg",
+         class: "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700" %>
+      
+      <p class="mt-2 text-sm text-slate-500">
+         Upload contracts, proposals, requirements, designs, or other project files.
+      </p>   
+   </div>   
 
    <%= form.submit class: "rounded-lg bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700" %>
 <% end %>

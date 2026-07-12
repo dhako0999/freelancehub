@@ -1,0 +1,26 @@
+<h1>Task Due Soon</h1>
+
+<p>Hello <%= @client.name %>,</p>
+
+<p>
+  This is a reminder that the following task for
+  <strong><%= @project.name %></strong> is due soon.
+</p>
+
+<ul>
+  <li><strong>Task:</strong> <%= @task.title %></li>
+  <li><strong>Status:</strong> <%= @task.status.humanize %></li>
+  <li><strong>Priority:</strong> <%= @task.priority.humanize %></li>
+  <li>
+    <strong>Due date:</strong>
+    <%= @task.due_date&.strftime("%B %-d, %Y") %>
+  </li>  
+</ul>  
+
+<% if @task.description.present? %>
+   <p><strong>Description:</strong></p>
+   <%= simple_format(@task.description) %>
+<% end %>
+
+<p>FreelanceHub</p>
+
