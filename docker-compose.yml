@@ -39,6 +39,9 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/freelancehub_development
       REDIS_URL: redis://redis:6379/0
       MAILER_FROM_ADDRESS: notifications@freelancehub.test
+      GCS_PROJECT_ID: freelancehub-502218
+      GCS_BUCKET: freelancehub-storage-2026 
+      GOOGLE_APPLICATION_CREDENTIALS: /rails/config/gcp/freelancehub-gcs-key.json
     depends_on:
       db:
         condition: service_healthy
@@ -57,6 +60,9 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/freelancehub_development
       REDIS_URL: redis://redis:6379/0
       MAILER_FROM_ADDRESS: notifications@freelancehub.test
+      GCS_PROJECT_ID: freelancehub-502218
+      GCS_BUCKET: freelancehub-storage-2026 
+      GOOGLE_APPLICATION_CREDENTIALS: /rails/config/gcp/freelancehub-gcs-key.json
     depends_on:
       db:
         condition: service_healthy

@@ -33,6 +33,11 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Ignore Google Cloud service account keys.
+/config/gcp/*.json
+
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+.DS_Store

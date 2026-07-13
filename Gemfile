@@ -72,3 +72,5 @@ gem "pagy", "~> 43.5"
 
 gem "sidekiq", "~> 8.1"
 
+gem "google-cloud-storage", require: false
+

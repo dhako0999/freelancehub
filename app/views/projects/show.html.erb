@@ -157,29 +157,55 @@
         <% @project.files.each do |file| %>
           <div class="rounded-lg border border-slate-200 p-4">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p class="font-medium text-slate-900">
-                  <%= file.filename.to_s %>
-                </p>
+              <div class="flex min-w-0 items-center gap-4">
+                <% if file.image? %>
+                  <%= link_to rails_blob_path(file, disposition: "inline"),
+                      target: "_blank",
+                      rel: "noopener" do %>
+                    <%= image_tag(
+                          file.variant(resize_to_limit: [160, 120]),
+                          alt: file.filename.to_s,
+                          class: "h-24 w-32 shrink-0 rounded-lg border border-slate-200 object-cover transition hover:opacity-80"
+                        ) %>
+                  <% end %>
+                <% else %>
+                  <div class="flex h-24 w-32 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50">
+                    <span class="text-sm font-semibold uppercase text-slate-500">
+                      <%= file.filename.extension_without_delimiter %>
+                    </span>
+                  </div>
+                <% end %>
 
-                <p class="mt-1 text-sm text-slate-500">
-                  <%= file.content_type %>
-                  ·
-                  <%= number_to_human_size(file.byte_size) %>
-                </p>
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-slate-900">
+                    <%= file.filename.to_s %>
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    <%= file.content_type %>
+                    ·
+                    <%= number_to_human_size(file.byte_size) %>
+                  </p>
+                </div>
               </div>
 
-              <%= link_to "Download",
-                  rails_blob_path(file, disposition: "attachment"),
-                  class: "inline-flex w-fit justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700" %>
+  
+              
+              <div class="flex shrink-0 gap-2">
+                <%= link_to "Download",
+                    rails_blob_path(file, disposition: "attachment"),
+                    class: "inline-flex items-center rounded-lg border border-green-300 bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700" %>
 
-              <%= button_to "Remove",
-                    attachment_path(file),
-                    method: :delete,
-                    data: {
-                      turbo_confirm: "Are you sure you want to remove this file?"
-                    },
-                    class: "rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50" %>  
+                <%= button_to "Remove",
+                      attachment_path(file),
+                      method: :delete,
+                      data: {
+                        turbo_confirm: "Are you sure you want to remove this file?"
+                      },
+                      class: "rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50" %> 
+
+              </div>  
+               
             </div>
           </div>
         <% end %>
