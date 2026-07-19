@@ -15,5 +15,16 @@
             <%= link_to "Contact", contact_path,
                 class: "hover:text-emerald-400 transition" %>     
         </div>  
+
+        <% if authenticated? %>
+           <%= button_to "Log Out",
+               session_path,
+               method: "delete",
+               class: "rounded-lg border border-slate-300 px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50" %>
+        <% else %>
+           <%= link_to "Log In",
+               new_session_path,
+               class: "rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700" %>
+        <% end %>
     </div>  
 </nav>  

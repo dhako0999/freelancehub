@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
   get "dashboard/index"
   get "tasks/index"
   get "tasks/show"

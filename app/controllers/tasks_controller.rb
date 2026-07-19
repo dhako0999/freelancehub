@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :set_client
   before_action :set_project
-  before_action :set_task, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_task, only: %i[show edit update destroy]
 
   def index
     @tasks = @project.tasks.order(created_at: :desc)
@@ -44,7 +44,7 @@ class TasksController < ApplicationController
   private
 
   def set_client
-    @client = Client.find(params[:client_id])
+    @client = Current.user.clients.find(params[:client_id])
   end
 
   def set_project

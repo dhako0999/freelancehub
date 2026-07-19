@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_client
-  before_action :set_project, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_project, only: %i[show edit update destroy]
 
   def index
     @projects = @client.projects
@@ -48,13 +48,13 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
 
-    redirect_to client_path(@client), notice: "Project was successfully deleted."
+    redirect_to client_path(@client), status: :see_other, notice: "Project was successfully deleted."
   end
 
   private
 
   def set_client
-    @client = Client.find(params[:client_id])
+    @client = Current.user.clients.find(params[:client_id])
   end
 
   def set_project
