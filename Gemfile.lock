@@ -195,7 +195,7 @@ GEM
     jbuilder (2.15.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.20.0)
+    json (2.21.1)
     jwt (3.2.0)
       base64
     kamal (2.12.0)
@@ -275,7 +275,7 @@ GEM
       racc (~> 1.4)
     os (1.1.4)
     ostruct (0.6.3)
-    pagy (43.5.6)
+    pagy (43.6.1)
       json
       uri
       yaml
@@ -504,7 +504,7 @@ DEPENDENCIES
   jbuilder
   kamal
   letter_opener_web
-  pagy (~> 43.5)
+  pagy (~> 43.6)
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
