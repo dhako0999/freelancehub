@@ -1,4 +1,7 @@
 class PagesController < ApplicationController
+
+  allow_unauthenticated_access only: %i[home about contact]
+
   def home
     @title = "AI Client Portal"
     @developer = "Johnny Doe"

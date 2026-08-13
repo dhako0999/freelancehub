@@ -1,30 +1,133 @@
-<nav class="bg-slate-900 px-8 py-5 text-white shadow-lg">
-    <div class="mx-auto flex max-w-6xl items-center justify-between">
+<nav class="border-b border-slate-200 bg-white shadow-sm">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-8">
+      <%= link_to root_path,
+                  class: "text-xl font-bold tracking-tight text-slate-950" do %>
+        AI Client Portal
+      <% end %>
 
-        <h1 class="text-2xl font-bold">
-            <%= link_to "AI Client Portal", root_path %>
-        </h1>
+      <div class="hidden items-center gap-2 sm:flex">
+        <%= link_to "Dashboard",
+                    dashboard_path,
+                    class: class_names(
+                      "rounded-lg px-3 py-2 text-sm font-semibold transition",
+                      {
+                        "bg-emerald-50 text-emerald-700" =>
+                          current_page?(root_path) || current_page?(dashboard_path),
 
-        <div class="space-x-6">
+                        "text-slate-600 hover:bg-slate-100 hover:text-slate-950" =>
+                          !current_page?(root_path) && !current_page?(dashboard_path)
+                      }
+                    ) %>
 
-            <%= link_to "Home", root_path,
-                class: "hover:text-emerald-400 transition" %>
-            
-            <%= link_to "About", about_path,
-                class: "hover:text-emerald-400 transition" %>
-            <%= link_to "Contact", contact_path,
-                class: "hover:text-emerald-400 transition" %>     
-        </div>  
+        <%= link_to "Clients",
+                    clients_path,
+                    class: class_names(
+                      "rounded-lg px-3 py-2 text-sm font-semibold transition",
+                      {
+                        "bg-emerald-50 text-emerald-700" =>
+                          controller_name == "clients",
 
-        <% if authenticated? %>
-           <%= button_to "Log Out",
-               session_path,
-               method: "delete",
-               class: "rounded-lg border border-slate-300 px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50" %>
-        <% else %>
-           <%= link_to "Log In",
-               new_session_path,
-               class: "rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700" %>
-        <% end %>
-    </div>  
-</nav>  
+                        "text-slate-600 hover:bg-slate-100 hover:text-slate-950" =>
+                          controller_name != "clients"
+                      }
+                    ) %>
+      </div>
+    </div>
+
+    <div
+        class="relative"
+        data-controller="dropdown"
+        data-action="click@window->dropdown#close"
+        >
+        <button
+            type="button"
+            class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 text-left shadow-sm transition hover:bg-slate-50"
+            data-action="click->dropdown#toggle:stop"
+            aria-label="Open account menu"
+        >
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700">
+            <%= Current.user.email_address.first.upcase %>
+            </div>
+
+            <div class="hidden md:block">
+            <p class="max-w-44 truncate text-sm font-semibold text-slate-800">
+                <%= Current.user.email_address %>
+            </p>
+
+            <p class="text-xs text-slate-500">
+                Account
+            </p>
+            </div>
+
+            <svg
+            class="hidden h-4 w-4 text-slate-500 md:block"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+            >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m6 9 6 6 6-6"
+            />
+            </svg>
+        </button>
+
+        <div
+            class="absolute right-0 z-50 mt-2 hidden w-64 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl"
+            data-dropdown-target="menu"
+        >
+            <div class="border-b border-slate-100 px-4 py-3">
+            <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                Signed in as
+            </p>
+
+            <p class="mt-1 truncate text-sm font-semibold text-slate-800">
+                <%= Current.user.email_address %>
+            </p>
+            </div>
+
+            <div class="p-2 space-y-1">
+                <%= link_to "Account Settings",
+                            account_path,
+                            class: "block rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950" %>
+
+                <%= button_to "Sign out",
+                            session_path,
+                            method: :delete,
+                            class: "w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-red-700 transition hover:bg-red-50" %>
+            </div>
+        </div>
+    </div>
+
+  <div class="flex gap-2 border-t border-slate-100 px-4 py-3 sm:hidden">
+    <%= link_to "Dashboard",
+                dashboard_path,
+                class: class_names(
+                  "flex-1 rounded-lg px-3 py-2 text-center text-sm font-semibold transition",
+                  {
+                    "bg-emerald-50 text-emerald-700" =>
+                      current_page?(root_path) || current_page?(dashboard_path),
+
+                    "text-slate-600 hover:bg-slate-100" =>
+                      !current_page?(root_path) && !current_page?(dashboard_path)
+                  }
+                ) %>
+
+    <%= link_to "Clients",
+                clients_path,
+                class: class_names(
+                  "flex-1 rounded-lg px-3 py-2 text-center text-sm font-semibold transition",
+                  {
+                    "bg-emerald-50 text-emerald-700" =>
+                      controller_name == "clients",
+
+                    "text-slate-600 hover:bg-slate-100" =>
+                      controller_name != "clients"
+                  }
+                ) %>
+  </div>
+</nav>

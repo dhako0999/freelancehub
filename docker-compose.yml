@@ -4,13 +4,17 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: freelancehub_development
+      POSTGRES_DB: ai_client_portal_development
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d freelancehub_development"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U postgres -d ai_client_portal_development",
+        ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -36,11 +40,14 @@ services:
       - "3000:3000"
     environment:
       RAILS_ENV: development
-      DATABASE_URL: postgres://postgres:postgres@db:5432/freelancehub_development
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
       REDIS_URL: redis://redis:6379/0
       MAILER_FROM_ADDRESS: notifications@freelancehub.test
       GCS_PROJECT_ID: freelancehub-502218
-      GCS_BUCKET: freelancehub-storage-2026 
+      GCS_BUCKET: freelancehub-storage-2026
       GOOGLE_APPLICATION_CREDENTIALS: /rails/config/gcp/freelancehub-gcs-key.json
     depends_on:
       db:
@@ -50,6 +57,24 @@ services:
     volumes:
       - .:/rails
 
+  tailwind:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bin/rails tailwindcss:watch
+    environment:
+      RAILS_ENV: development
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/rails
+    tty: true
+
   sidekiq:
     build:
       context: .
@@ -57,11 +82,14 @@ services:
     command: bundle exec sidekiq
     environment:
       RAILS_ENV: development
-      DATABASE_URL: postgres://postgres:postgres@db:5432/freelancehub_development
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
       REDIS_URL: redis://redis:6379/0
       MAILER_FROM_ADDRESS: notifications@freelancehub.test
       GCS_PROJECT_ID: freelancehub-502218
-      GCS_BUCKET: freelancehub-storage-2026 
+      GCS_BUCKET: freelancehub-storage-2026
       GOOGLE_APPLICATION_CREDENTIALS: /rails/config/gcp/freelancehub-gcs-key.json
     depends_on:
       db:
@@ -69,7 +97,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - .:/rails           
+      - .:/rails
 
 volumes:
   postgres_data:

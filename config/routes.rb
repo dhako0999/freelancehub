@@ -1,12 +1,21 @@
 Rails.application.routes.draw do
+  
   resource :session
   resources :passwords, param: :token
-  get "dashboard/index"
-  get "tasks/index"
-  get "tasks/show"
-  get "tasks/new"
-  get "tasks/edit"
+
+  resource :account, only: %i[show edit update]                                                               
+
+  get "sign_up",
+      to: "registration#new",
+      as: :new_registration
+
+  post "sign_up",
+      to: "registration#create",
+      as: :registration    
+
+
   root "dashboard#index"
+  get "dashboard", to: "dashboard#index", as: :dashboard
 
   get "home", to: "pages#home"
   get "about", to: "pages#about"
@@ -17,6 +26,8 @@ Rails.application.routes.draw do
       resources :tasks
     end
   end
+
+  resources :attachments, only: :destroy
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -36,4 +47,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
 end

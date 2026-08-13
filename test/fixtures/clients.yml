@@ -1,15 +1,18 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  email: MyString
-  company: MyString
-  phone: MyString
-  notes: MyText
+  name: First User Client
+  email: first-client@example.com
+  company: First Company
+  phone: "555-111-1111"
+  notes: First user's client
+  user: one
 
 two:
-  name: MyString
-  email: MyString
-  company: MyString
-  phone: MyString
-  notes: MyText
+  name: Second User Client
+  email: second-client@example.com
+  company: Second Company
+  phone: "555-222-2222"
+  notes: Second user's client
+  user: two
+

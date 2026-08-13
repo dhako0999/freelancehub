@@ -1,0 +1,67 @@
+<div class="mx-auto max-w-3xl">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="text-sm font-semibold text-emerald-700">
+        Account
+      </p>
+
+      <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-950">
+        Account settings
+      </h1>
+
+      <p class="mt-2 text-sm text-slate-600">
+        Review and manage your account information.
+      </p>
+    </div>
+
+    <%= link_to "Edit account",
+                edit_account_path,
+                class: "rounded-xl bg-emerald-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700" %>
+  </div>
+
+  <section class="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="divide-y divide-slate-100">
+      <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
+        <p class="text-sm font-semibold text-slate-500">
+           Email Address
+        </p>
+
+        <p class="mt-2 break-words text-sm font-semibold text-slate-950 sm:col-span-2 sm:mt-0">
+          <%= @user.email_address %>
+        </p>
+      </div> 
+      
+      <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
+        <p class="text-sm font-semibold text-slate-500">
+          Member Since
+        </p>  
+
+        <p class="mt-2 text-sm font-semibold text-slate-950 sm:col-span-2 sm:mt-0">
+          <%= @user.created_at.strftime("%B %-d, %Y") %>
+        </p>
+      </div> 
+      
+      <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
+        <p class="text-sm font-semibold text-slate-500">
+          Account Status
+        </p> 
+        
+        <div class="mt-2 sm:col-span-2 sm:mt-0">
+          <span class="inline-flex items-center gap-2 rounded-full bg-emerald-30 px-3 py-1 text-sm font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            Active
+          </span>
+        </div>  
+      </div>  
+    </div>  
+
+    <div class="border-t border-slate-200 bg-slate-50 px-6 py-5">
+      <div class="flex justify-end">
+        <%= link_to "Edit Account",
+                    edit_account_path,
+                    class: "rounded-xl bg-emerald-600 px-5 py-3 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+          %>
+      </div>  
+    </div> 
+  </section>  
+</div> 

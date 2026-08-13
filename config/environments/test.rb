@@ -31,6 +31,12 @@ Rails.application.configure do
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 
+  # Use the Active Job test adapeter so job assertions work in tests.
+  config.active_job.queue_adapter = :test
+
+  # Tell Action Mailer not to deliver emails to the real world.
+  config.action_mailer.delivery_method = :test
+
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
