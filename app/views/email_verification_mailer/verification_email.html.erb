@@ -1,0 +1,18 @@
+<h1>Verify your email address</h1>
+
+<p>
+  Thanks for creating an AI Client Portal account.
+</p>
+
+<p>
+  Please verify your email address to activate your account.
+</p>
+
+<p>
+  <%= link_to "Verify Email",
+              email_verification_url(@token) %>
+</p>
+
+<p>
+  This verification link expires in 24 hours.
+</p>

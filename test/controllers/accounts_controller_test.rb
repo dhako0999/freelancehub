@@ -18,15 +18,18 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should update email address" do
+  test "should update email address and require reverification" do
     patch account_url, params: {
       user: {
         email_address: "updated@example.com"
       }
     }
-
-    assert_redirected_to account_url
-    assert_equal "updated@example.com", @user.reload.email_address
+  
+    @user.reload
+  
+    assert_equal "updated@example.com", @user.email_address
+    assert_nil @user.email_verified_at
+    assert_redirected_to new_session_url
   end
 
   test "should not update account with blank email address" do
@@ -71,6 +74,30 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   
     assert_redirected_to new_session_url
     assert_equal original_email, @user.reload.email_address
+  end
+
+  test "changing email requires reverification" do
+    patch account_url, params: {
+      user: {
+        email_address: "new-address@example.com"
+      }
+    }
+  
+    @user.reload
+  
+    assert_equal "new-address@example.com", @user.email_address
+    assert_nil @user.email_verified_at
+    assert_redirected_to new_session_url
+  end
+  
+  test "changing email sends verification email" do
+    assert_enqueued_emails 1 do
+      patch account_url, params: {
+        user: {
+          email_address: "new-address@example.com"
+        }
+      }
+    end
   end
 end
 

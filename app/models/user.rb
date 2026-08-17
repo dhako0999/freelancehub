@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   has_secure_password
-  
+
   has_many :sessions, dependent: :destroy
   has_many :clients, dependent: :destroy
 
@@ -13,4 +13,12 @@ class User < ApplicationRecord
               with: URI::MailTo::EMAIL_REGEXP,
               message: "must be a valid email address"
             }
+
+  generates_token_for :email_verification, expires_in: 24.hours do
+    email_address
+  end
+
+  def email_verified?
+    email_verified_at.present?
+  end
 end
