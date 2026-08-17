@@ -1,6 +1,16 @@
 class EmailVerificationsController < ApplicationController
   allow_unauthenticated_access only: %i[new create show]
 
+  rate_limit to: 1,
+           within: 1.minute,
+           only: :create,
+           by: -> { params[:email_address].to_s.strip.downcase },
+           with: -> {
+             redirect_to new_email_verification_path,
+                         alert: "Please wait a minute before requesting another verification email."
+           }
+
+
   def new
   end
 

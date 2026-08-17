@@ -1,6 +1,11 @@
 require "test_helper"
 
 class EmailVerificationsControllerTest < ActionDispatch::IntegrationTest
+
+  setup do
+    Rails.cache.clear
+  end
+
   test "valid token verifies user" do
     user = users(:one)
     user.update!(email_verified_at: nil)
@@ -65,6 +70,26 @@ class EmailVerificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(
       "If an unverified account exists for that email address, a new verification email has been sent.",
       flash[:notice]
+    )
+  end
+
+  test "rate limits repeated verification email requests" do
+    user = users(:one)
+    user.update!(email_verified_at: nil)
+  
+    post resend_email_verification_url,
+         params: { email_address: user.email_address }
+  
+    assert_redirected_to new_session_url
+  
+    post resend_email_verification_url,
+         params: { email_address: user.email_address }
+  
+    assert_redirected_to new_email_verification_url
+  
+    assert_equal(
+      "Please wait a minute before requesting another verification email.",
+      flash[:alert]
     )
   end
 end
