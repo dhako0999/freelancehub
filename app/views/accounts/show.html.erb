@@ -22,6 +22,36 @@
 
   <section class="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
     <div class="divide-y divide-slate-100">
+
+      <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
+        <p class="text-sm font-semibold text-slate-500">
+          First Name
+        </p>
+
+        <p class="mt-2 text-sm font-semibold text-slate-950 sm:col-span-2 sm:mt-0">
+          <%= @user.first_name.presence || "Not provided" %>
+        </p>
+      </div>
+
+      <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
+        <p class="text-sm font-semibold text-slate-500">
+          Last Name
+        </p>
+
+        <p class="mt-2 text-sm font-semibold text-slate-950 sm:col-span-2 sm:mt-0">
+          <%= @user.last_name.presence || "Not provided" %>
+        </p>
+      </div>
+
+      <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
+        <p class="text-sm font-semibold text-slate-500">
+          Company
+        </p>
+
+        <p class="mt-2 text-sm font-semibold text-slate-950 sm:col-span-2 sm:mt-0">
+          <%= @user.company_name.presence || "Not provided" %>
+        </p>
+      </div>
       <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
         <p class="text-sm font-semibold text-slate-500">
            Email Address

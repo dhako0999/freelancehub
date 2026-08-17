@@ -99,5 +99,30 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
       }
     end
   end
+
+  test "updates profile without requiring email reverification" do
+    original_verified_at = @user.email_verified_at
+  
+    assert_no_enqueued_emails do
+      patch account_url, params: {
+        user: {
+          first_name: "John",
+          last_name: "Doe",
+          company_name: "Doe Consulting",
+          email_address: @user.email_address
+        }
+      }
+    end
+  
+    @user.reload
+  
+    assert_equal "John", @user.first_name
+    assert_equal "Doe", @user.last_name
+    assert_equal "Doe Consulting", @user.company_name
+  
+    assert_equal original_verified_at, @user.email_verified_at
+  
+    assert_redirected_to account_url
+  end
 end
 
