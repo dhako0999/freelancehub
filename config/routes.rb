@@ -13,6 +13,14 @@ Rails.application.routes.draw do
       to: "registration#create",
       as: :registration    
 
+  get "email_verification/resend",
+      to: "email_verifications#new",
+      as: :new_email_verification
+  
+  post "email_verification/resend",
+       to: "email_verifications#create",
+       as: :resend_email_verification
+  
   get "email_verification/:token",
       to: "email_verifications#show",
       as: :email_verification

@@ -101,5 +101,24 @@ class AuthenticationTest < ApplicationSystemTestCase
     assert_text "Dashboard"
   end
 
+  test "user can request a new verification email" do
+    user = users(:one)
+    user.update!(email_verified_at: nil)
+  
+    visit new_session_path
+  
+    click_link "Resend Verification Email"
+  
+    assert_current_path new_email_verification_path
+  
+    fill_in "Email address", with: user.email_address
+  
+    click_button "Send Verification Email"
+  
+    assert_current_path new_session_path
+  
+    assert_text "If an unverified account exists for that email address, a new verification email has been sent."
+  end
+
   
 end
