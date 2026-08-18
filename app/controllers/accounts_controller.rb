@@ -41,7 +41,9 @@ class AccountsController < ApplicationController
         :first_name,
         :last_name,
         :company_name,
-        :email_address
+        :email_address,
+        :task_reminders_enabled,
+        :reminder_days_before
       ]
     )
   end

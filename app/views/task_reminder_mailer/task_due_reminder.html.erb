@@ -9,11 +9,11 @@
 
 <ul>
   <li><strong>Task:</strong> <%= @task.title %></li>
-  <li><strong>Status:</strong> <%= @task.status.humanize %></li>
-  <li><strong>Priority:</strong> <%= @task.priority.humanize %></li>
+  <li><strong>Status:</strong> <%= @task.status&.humanize || "Not specified" %></li>
+  <li><strong>Priority:</strong> <%= @task.priority&.humanize || "Not specified" %></li>
   <li>
     <strong>Due date:</strong>
-    <%= @task.due_date&.strftime("%B %-d, %Y") %>
+    <%= @task.due_date&.strftime("%B %-d, %Y") || "Not specified" %>
   </li>  
 </ul>  
 

@@ -13,10 +13,13 @@ class User < ApplicationRecord
   validates :last_name,
             length: { maximum: 50 },
             allow_blank: true
-  
+
   validates :company_name,
             length: { maximum: 100 },
             allow_blank: true
+
+  validates :reminder_days_before,
+            inclusion: { in: [1, 2, 3, 7] }
 
   validates :email_address,
             presence: true,

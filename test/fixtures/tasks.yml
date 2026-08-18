@@ -4,6 +4,7 @@ one:
   project: one
   title: MyString
   status: MyString
+  priority: Medium
   due_date: 2026-07-07
   description: MyText
 
@@ -11,5 +12,6 @@ two:
   project: two
   title: MyString
   status: MyString
+  priority: Medium
   due_date: 2026-07-07
   description: MyText

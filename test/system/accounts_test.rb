@@ -31,4 +31,33 @@ class AccountsTest < ApplicationSystemTestCase
       assert_text "Doe"
       assert_text "Doe Consulting"
     end
-  end
+
+    test "user can update notification preferences" do
+        user = users(:one)
+      
+        visit new_session_path
+      
+        fill_in "Email address", with: user.email_address
+        fill_in "Password", with: "password"
+      
+        click_button "Sign in"
+      
+        assert_text "Dashboard"
+      
+        find("[aria-label='Open account menu']").click
+        click_link "Account Settings"
+      
+        find("#edit-account-link").click
+      
+        uncheck "Send me task reminder emails"
+      
+        select "7 days before", from: "Remind me before a task is due"
+      
+        click_button "Save changes"
+      
+        assert_current_path account_path
+        assert_text "Your account was successfully updated."
+        assert_text "Disabled"
+        assert_text "7 days before due date"
+    end
+end

@@ -52,6 +52,26 @@
           <%= @user.company_name.presence || "Not provided" %>
         </p>
       </div>
+
+      <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
+        <p class="text-sm font-semibold text-slate-500">
+          Task Reminders
+        </p>
+
+        <p class="mt-2 text-sm font-semibold text-slate-950 sm:col-span-2 sm:mt-0">
+          <%= @user.task_reminders_enabled ? "Enabled" : "Disabled" %>
+        </p>
+      </div>
+
+      <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
+        <p class="text-sm font-semibold text-slate-500">
+           Reminder Testing
+        </p>
+
+        <p class="mt-2 text-sm font-semibold text-slate-950 sm:col-span-2 sm:mt-0">
+          <%= @user.reminder_days_before == 1 ? "1 day before due date" : "#{@user.reminder_days_before} days before due date" %>
+        </p>
+      </div>
       <div class="px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-6">
         <p class="text-sm font-semibold text-slate-500">
            Email Address

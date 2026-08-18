@@ -21,5 +21,9 @@ end
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :selenium_chromium_headless,
             screen_size: [1400, 1400]
+
+  setup do
+    Rails.cache.clear
+  end
 end
 

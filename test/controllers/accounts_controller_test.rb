@@ -124,5 +124,28 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   
     assert_redirected_to account_url
   end
+
+
+  test "updates notification preferences without requiring email reverification" do
+    original_verified_at = @user.email_verified_at
+  
+    assert_no_enqueued_emails do
+      patch account_url, params: {
+        user: {
+          task_reminders_enabled: "0",
+          reminder_days_before: 7,
+          email_address: @user.email_address
+        }
+      }
+    end
+  
+    @user.reload
+  
+    assert_not @user.task_reminders_enabled?
+    assert_equal 7, @user.reminder_days_before
+    assert_equal original_verified_at, @user.email_verified_at
+  
+    assert_redirected_to account_url
+  end
 end
 
