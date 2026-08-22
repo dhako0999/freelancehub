@@ -1,0 +1,6 @@
+task_reminder_job:
+  cron: "0 8 * * * America/New_York"
+  class: "TaskReminderJob"
+  queue: default
+  active_job: true
+  description: "Send daily task reminder emails"
