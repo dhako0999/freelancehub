@@ -25,7 +25,7 @@ class TaskReminderJob < ApplicationJob
         .where(due_date: reminder_date)
 
       overdue_tasks.find_each do |task|
-        next if reminder_sent_today?(task)
+        next if overdue_reminder_sent_today?(task)
 
         Rails.logger.warn(
           "OVERDUE TASK: #{task.title} | " \
@@ -39,13 +39,13 @@ class TaskReminderJob < ApplicationJob
           .task_due_reminder
           .deliver_now
 
-        task.update!(last_reminder_sent_at: Time.current)
+        task.update!(overdue_reminder_sent_at: Time.current)
 
         total_overdue += 1
       end
 
       due_soon_tasks.find_each do |task|
-        next if reminder_sent_today?(task)
+        next if due_soon_reminder_sent?(task)
 
         Rails.logger.info(
           "DUE SOON: #{task.title} | " \
@@ -59,7 +59,7 @@ class TaskReminderJob < ApplicationJob
           .task_due_reminder
           .deliver_now
 
-        task.update!(last_reminder_sent_at: Time.current)
+        task.update!(due_soon_reminder_sent_at: Time.current)
 
         total_due_soon += 1
       end
@@ -74,7 +74,11 @@ class TaskReminderJob < ApplicationJob
 
   private
 
-  def reminder_sent_today?(task)
-    task.last_reminder_sent_at&.to_date == Date.current
+  def overdue_reminder_sent_today?(task)
+    task.overdue_reminder_sent_at&.to_date == Date.current
+  end
+
+  def due_soon_reminder_sent?(task)
+    task.due_soon_reminder_sent_at.present?
   end
 end

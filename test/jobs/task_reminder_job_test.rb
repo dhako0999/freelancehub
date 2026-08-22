@@ -125,46 +125,73 @@ class TaskReminderJobTest < ActiveJob::TestCase
     end
   end
 
-
-  test "does not send duplicate reminder on the same day" do
+  test "can send overdue reminder again on a later day" do
     @user.update!(
       task_reminders_enabled: true,
       reminder_days_before: 2
     )
   
     task = @project.tasks.create!(
-      title: "Duplicate Prevention Task",
+      title: "Repeat Overdue Reminder Task",
       status: "Active",
       priority: "High",
-      due_date: Date.current + 2.days
+      due_date: Date.current - 2.days,
+      overdue_reminder_sent_at: 1.day.ago
     )
   
     assert_difference("ActionMailer::Base.deliveries.size", 1) do
       TaskReminderJob.perform_now
     end
   
-    assert_not_nil task.reload.last_reminder_sent_at
-  
-    assert_no_difference("ActionMailer::Base.deliveries.size") do
-      TaskReminderJob.perform_now
-    end
+    assert_not_nil task.reload.overdue_reminder_sent_at
   end
 
-  test "can send reminder again on a later day" do
+  test "due soon reminder does not block overdue reminder later" do
     @user.update!(
       task_reminders_enabled: true,
       reminder_days_before: 2
     )
   
-    @project.tasks.create!(
-      title: "Repeat Reminder Task",
+    task = @project.tasks.create!(
+      title: "Transition Task",
       status: "Active",
       priority: "High",
-      due_date: Date.current + 2.days,
-      last_reminder_sent_at: 1.day.ago
+      due_date: Date.current + 2.days
     )
   
-    assert_difference("ActionMailer::Base.deliveries.size", 1) do
+    TaskReminderJob.perform_now
+  
+    assert_not_nil task.reload.due_soon_reminder_sent_at
+    assert_nil task.overdue_reminder_sent_at
+  
+    travel 3.days do
+      assert_difference("ActionMailer::Base.deliveries.size", 1) do
+        TaskReminderJob.perform_now
+      end
+  
+      assert_not_nil task.reload.overdue_reminder_sent_at
+    end
+  end
+
+  test "does not send duplicate due soon reminder" do
+    @user.update!(
+      task_reminders_enabled: true,
+      reminder_days_before: 2
+    )
+  
+    task = @project.tasks.create!(
+      title: "Single Due Soon Reminder",
+      status: "Active",
+      priority: "High",
+      due_date: Date.current + 2.days
+    )
+  
+    TaskReminderJob.perform_now
+  
+    assert_not_nil task.reload.due_soon_reminder_sent_at
+    assert_nil task.overdue_reminder_sent_at
+  
+    assert_no_difference("ActionMailer::Base.deliveries.size") do
       TaskReminderJob.perform_now
     end
   end
