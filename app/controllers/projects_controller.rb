@@ -32,14 +32,16 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    new_files = project_params[:files]
-    project_attributes = project_params.except(:files)
-
-    @project.assign_attributes(project_attributes)
+    attributes = project_params
+    new_files = attributes.delete(:files)
+  
+    @project.assign_attributes(attributes)
+  
     @project.files.attach(new_files) if new_files.present?
-
+  
     if @project.save
-      redirect_to client_project_path(@client, @project), notice: "Project was successfully updated."
+      redirect_to client_project_path(@client, @project),
+                  notice: "Project was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end

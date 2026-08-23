@@ -149,4 +149,62 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_session_url
   end
+
+
+  test "should attach valid file to own project" do
+    file = fixture_file_upload(
+      Rails.root.join("test/fixtures/files/sample.txt"),
+      "text/plain"
+    )
+  
+    assert_difference("@project.reload.files.count", 1) do
+      patch client_project_url(@client, @project), params: {
+        project: {
+          name: @project.name,
+          status: @project.status,
+          files: [file]
+        }
+      }
+    end
+  
+    assert_redirected_to client_project_url(@client, @project)
+  end
+
+  test "should reject unsuppported file type" do
+    file = fixture_file_upload(
+      Rails.root.join("test/fixtures/files/sample.exe"),
+      "application/octet-stream"
+    )
+
+    original_count = @project.files.count
+
+    patch client_project_url(@client, @project), params: {
+      project: {
+        name: @project.name,
+        status: @project.status,
+        files: [file]
+      }
+    }
+
+    assert_response :unprocessable_entity
+    assert_equal original_count, @project.reload.files.count
+  end
+
+  test "should reject file larger than 10 MB" do
+    file = fixture_file_upload(
+      Rails.root.join("test/fixtures/files/large.txt"),
+      "text/plain"
+    )
+  
+    patch client_project_url(@client, @project), params: {
+      project: {
+        name: @project.name,
+        status: @project.status,
+        files: [file]
+      }
+    }
+  
+    assert_response :unprocessable_entity
+    assert_equal 0, @project.reload.files.count
+  end
 end
