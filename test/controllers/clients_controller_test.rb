@@ -131,4 +131,72 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_session_url
   end
+
+  test "should attach valid file to own client" do
+    file = fixture_file_upload(
+      Rails.root.join("test/fixtures/files/sample.txt"),
+      "text/plain"
+    )
+  
+    assert_difference -> { @own_client.reload.files.count }, 1 do
+      patch client_url(@own_client), params: {
+        client: {
+          name: @own_client.name,
+          email: @own_client.email,
+          company: @own_client.company,
+          phone: @own_client.phone,
+          notes: @own_client.notes,
+          files: [file]
+        }
+      }
+    end
+  
+    assert_redirected_to client_url(@own_client)
+  end
+
+  test "should reject unsupported client file type" do
+    file = fixture_file_upload(
+      Rails.root.join("test/fixtures/files/sample.exe"),
+      "application/octet-stream"
+    )
+  
+    original_count = @own_client.files.count
+  
+    patch client_url(@own_client), params: {
+      client: {
+        name: @own_client.name,
+        email: @own_client.email,
+        company: @own_client.company,
+        phone: @own_client.phone,
+        notes: @own_client.notes,
+        files: [file]
+      }
+    }
+  
+    assert_response :unprocessable_entity
+    assert_equal original_count, @own_client.reload.files.count
+  end
+
+  test "should reject client file larger than 10 MB" do
+    file = fixture_file_upload(
+      Rails.root.join("test/fixtures/files/large.txt"),
+      "text/plain"
+    )
+  
+    original_count = @own_client.files.count
+  
+    patch client_url(@own_client), params: {
+      client: {
+        name: @own_client.name,
+        email: @own_client.email,
+        company: @own_client.company,
+        phone: @own_client.phone,
+        notes: @own_client.notes,
+        files: [file]
+      }
+    }
+  
+    assert_response :unprocessable_entity
+    assert_equal original_count, @own_client.reload.files.count
+  end
 end

@@ -38,6 +38,93 @@
   </div>
 
   <div class="mt-10 border-t border-slate-200 pt-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-semibold text-slate-900">
+          Client Files
+        </h2>
+
+        <p class="mt-1 text-sm text-slate-500">
+          Contracts, NDAs, intake documents, brand assets, and other client-level files.
+        </p>
+      </div>
+
+      <span class="rounded-xl bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700">
+        <%= pluralize(@client.files.count, "file") %>
+      </span>
+    </div>
+
+    <% if @client.files.attached? %>
+      <div class="mt-4 space-y-3">
+        <% @client.files.each do |file| %>
+          <div class="rounded-lg border border-slate-200 p-4">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+              <div class="flex min-w-0 items-center gap-4">
+                <% if file.image? %>
+                  <%= link_to rails_blob_path(file, disposition: "inline"),
+                              target: "_blank",
+                              rel: "noopener" do %>
+
+                    <%= image_tag(
+                          file.variant(resize_to_limit: [160, 120]),
+                          alt: file.filename.to_s,
+                          class: "h-24 w-32 shrink-0 rounded-lg border border-slate-200 object-cover transition hover:opacity-80"
+                        ) %>
+                  <% end %>
+                <% else %>
+                  <div class="flex h-24 w-32 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50">
+                    <span class="text-sm font-semibold uppercase text-slate-500">
+                      <%= file.filename.extension_without_delimiter %>
+                    </span>
+                  </div>
+                <% end %>
+
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-slate-900">
+                    <%= file.filename.to_s %>
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    <%= file.content_type %>
+                    ·
+                    <%= number_to_human_size(file.byte_size) %>
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex shrink-0 gap-2">
+                <%= link_to "Download",
+                            rails_blob_path(file, disposition: "attachment"),
+                            class: "inline-flex items-center rounded-lg border border-green-300 bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700" %>
+
+                <%= button_to "Remove",
+                              attachment_path(file),
+                              method: :delete,
+                              data: {
+                                turbo_confirm: "Are you sure you want to remove this file?"
+                              },
+                              class: "rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50" %>
+              </div>
+
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
+        <p class="text-sm font-medium text-slate-700">
+          No client files uploaded yet.
+        </p>
+
+        <p class="mt-1 text-sm text-slate-500">
+          Edit this client to upload documents and other files.
+        </p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-10 border-t border-slate-200 pt-8">
   <div class="mb-6 flex items-center justify-between">
     <div>
       <h2 class="text-2xl font-bold text-slate-900">Projects</h2>

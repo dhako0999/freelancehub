@@ -37,12 +37,19 @@ class ClientsController < ApplicationController
   end
 
   def update
-
-     if @client.update(client_params)
-       redirect_to client_path(@client), notice: "Client was successfully updated."
-     else
-       render :edit, status: :unprocessable_entity
-     end
+    attributes = client_params
+    new_files = attributes.delete(:files)
+  
+    @client.assign_attributes(attributes)
+  
+    @client.files.attach(new_files) if new_files.present?
+  
+    if @client.save
+      redirect_to client_path(@client),
+                  notice: "Client was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -59,6 +66,17 @@ class ClientsController < ApplicationController
   end  
 
   def client_params
-    params.require(:client).permit(:name, :email, :company, :phone, :notes)
+    params.require(:client).permit(
+      :name, 
+      :email, 
+      :company, 
+      :phone, 
+      :notes,
+      :industry,
+      :service_type,
+      :status,
+      :website,
+      files: []
+    )
   end
 end

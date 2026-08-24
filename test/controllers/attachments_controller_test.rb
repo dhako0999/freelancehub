@@ -55,4 +55,38 @@ class AttachmentsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
   end
+
+  test "user can remove attachment from own client" do
+    file = fixture_file_upload(
+      Rails.root.join("test/fixtures/files/sample.txt"),
+      "text/plain"
+    )
+
+    @client.files.attach(file)
+
+    attachment = @client.files.first
+
+    assert_difference("ActiveStorage::Attachment.count", -1) do
+      delete attachment_url(attachment)
+    end
+
+    assert_redirected_to client_url(@client)
+  end
+
+  test "user cannot remove attachment from another user's client" do
+    file = fixture_file_upload(
+      Rails.root.join("test/fixtures/files/sample.txt"),
+      "text/plain"
+    )
+  
+    @other_client.files.attach(file)
+  
+    attachment = @other_client.files.first
+  
+    assert_no_difference("ActiveStorage::Attachment.count") do
+      delete attachment_url(attachment)
+    end
+  
+    assert_response :not_found
+  end
 end

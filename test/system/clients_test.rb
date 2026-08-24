@@ -44,4 +44,37 @@ class ClientsTest < ApplicationSystemTestCase
       
         assert_text "System Test Client"
     end
+
+    test "user can upload and remove a client file" do
+      user = users(:one)
+      client = clients(:one)
+  
+      visit new_session_path
+  
+      fill_in "Email address", with: user.email_address
+      fill_in "Password", with: "password"
+  
+      click_button "Sign in"
+  
+      assert_text "Dashboard"
+  
+      visit edit_client_path(client)
+  
+      attach_file(
+        "Client Files",
+        Rails.root.join("test/fixtures/files/sample.txt")
+      )
+  
+      click_button "Update Client"
+  
+      assert_text "Client was successfully updated."
+      assert_text "sample.txt"
+  
+      accept_confirm "Are you sure you want to remove this file?" do
+        click_button "Remove"
+      end
+  
+      assert_text "File was successfully removed."
+      assert_no_text "sample.txt"
+    end
 end
