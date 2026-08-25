@@ -58,4 +58,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  get "assistant",
+      to: "assistant#show",
+      as: :assistant
+
+  post "assistant",
+      to: "assistant#create"
+
 end

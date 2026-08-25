@@ -49,6 +49,7 @@ services:
       GCS_PROJECT_ID: freelancehub-502218
       GCS_BUCKET: freelancehub-storage-2026
       GOOGLE_APPLICATION_CREDENTIALS: /rails/config/gcp/freelancehub-gcs-key.json
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
     depends_on:
       db:
         condition: service_healthy
