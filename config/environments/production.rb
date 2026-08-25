@@ -50,15 +50,31 @@ Rails.application.configure do
   config.cache_store = :solid_cache_store
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :queue } }
+  config.active_job.queue_adapter = :sidekiq
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.default_url_options = {
+    host: ENV.fetch("APP_HOST"),
+    protocol: "https"
+  }
+
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch("SMTP_ADDRESS"),
+    port: ENV.fetch("SMTP_PORT", 587).to_i,
+    domain: ENV.fetch("SMTP_DOMAIN"),
+    user_name: ENV.fetch("SMTP_USERNAME"),
+    password: ENV.fetch("SMTP_PASSWORD"),
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {
