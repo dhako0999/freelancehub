@@ -73,7 +73,7 @@ group :test do
   gem "minitest-mock"
 end
 
-gem "pagy", "~> 43.5"
+gem "pagy", "~> 43.6"
 
 gem "sidekiq", "~> 8.1"
 
