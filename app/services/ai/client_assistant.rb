@@ -25,6 +25,33 @@ module Ai
       response.output_text
     end
 
+    def generate_title(question)
+      response = @client.responses.create(
+        model: "gpt-5.2",
+        input: [
+          {
+            role: "system",
+            content: <<~PROMPT
+              Create a short title for an AI CRM conversation.
+    
+              Requirements:
+              - Maximum 6 words
+              - No quotation marks
+              - No period at the end
+              - Be specific to the user's question
+              - Return only the title
+            PROMPT
+          },
+          {
+            role: "user",
+            content: question
+          }
+        ]
+      )
+    
+      response.output_text.strip
+    end
+
     private
 
     def conversation_history

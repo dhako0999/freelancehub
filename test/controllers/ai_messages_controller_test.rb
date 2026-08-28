@@ -69,4 +69,68 @@ class AiMessagesControllerTest < ActionDispatch::IntegrationTest
   
     assert_response :not_found
   end
+
+  test "generates title for a new conversation" do
+    conversation = @user.ai_conversations.create!(
+      title: "New Conversation"
+    )
+  
+    fake_assistant = Minitest::Mock.new
+  
+    fake_assistant.expect(
+      :ask,
+      "You are working on a website project.",
+      ["What project am I working on?"]
+    )
+  
+    fake_assistant.expect(
+      :generate_title,
+      "Current Website Project",
+      ["What project am I working on?"]
+    )
+  
+    Ai::ClientAssistant.stub :new, fake_assistant do
+      post ai_conversation_ai_messages_url(conversation),
+           params: {
+             content: "What project am I working on?"
+           }
+    end
+  
+    assert_redirected_to ai_conversation_url(conversation)
+  
+    conversation.reload
+  
+    assert_equal "Current Website Project", conversation.title
+  
+    fake_assistant.verify
+  end
+
+  test "does not regenerate title for an existing conversation" do
+    conversation = @user.ai_conversations.create!(
+      title: "Current Website Project"
+    )
+  
+    fake_assistant = Minitest::Mock.new
+  
+    fake_assistant.expect(
+      :ask,
+      "The deadline is not specified.",
+      ["What is its deadline?"]
+    )
+  
+    Ai::ClientAssistant.stub :new, fake_assistant do
+      post ai_conversation_ai_messages_url(conversation),
+           params: {
+             content: "What is its deadline?"
+           }
+    end
+  
+    assert_redirected_to ai_conversation_url(conversation)
+  
+    conversation.reload
+  
+    assert_equal "Current Website Project", conversation.title
+  
+    fake_assistant.verify
+  end
 end

@@ -22,12 +22,18 @@ class AiMessagesController < ApplicationController
         content: question
       )
   
-      answer = Ai::ClientAssistant
-        .new(
-          user: Current.user,
-          messages: previous_messages
+      assistant = Ai::ClientAssistant.new(
+        user: Current.user,
+        messages: previous_messages
+      )
+  
+      answer = assistant.ask(question)
+  
+      if conversation.title == "New Conversation"
+        conversation.update!(
+          title: assistant.generate_title(question)
         )
-        .ask(question)
+      end
   
       conversation.ai_messages.create!(
         role: "assistant",
