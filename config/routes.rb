@@ -65,4 +65,10 @@ Rails.application.routes.draw do
   post "assistant",
       to: "assistant#create"
 
+  resources :ai_conversations,
+          path: "assistant/conversations",
+          only: %i[index show create] do
+    resources :ai_messages, only: :create
+  end
+
 end

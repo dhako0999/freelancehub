@@ -1,0 +1,27 @@
+<div class="mx-auto max-w-4xl">
+  <h1 class="text-3xl font-bold text-slate-950">
+    <%= @conversation.title %>
+  </h1>
+
+  <div class="mt-8 space-y-4">
+    <% @messages.each do |message| %>
+      <div class="<%= message.role == "user" ? "ml-auto bg-emerald-600 text-white" : "mr-auto bg-slate-100 text-slate-900" %> max-w-2xl rounded-2xl px-5 py-4">
+        <%= simple_format(message.content) %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-8">
+    <%= form_with url: ai_conversation_ai_messages_path(@conversation),
+                  method: :post do |form| %>
+
+      <%= form.text_area :content,
+                         rows: 4,
+                         placeholder: "Ask a follow-up question...",
+                         class: "w-full rounded-xl border border-slate-300 px-4 py-3" %>
+
+      <%= form.submit "Send",
+                      class: "mt-3 rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white" %>
+    <% end %>
+  </div>
+</div>
