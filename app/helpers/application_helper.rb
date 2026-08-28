@@ -49,4 +49,34 @@ module ApplicationHelper
         attributes: %w[href title]
       )
     end
+
+
+    def ai_suggested_prompts(user)
+      prompts = []
+    
+      if user.clients.exists?
+        prompts << "Summarize my current clients."
+      end
+    
+      if user.clients.joins(:projects).exists?
+        prompts << "What projects am I currently working on?"
+        prompts << "Which projects have upcoming deadlines?"
+      end
+    
+      if user.clients.joins(projects: :tasks).exists?
+        prompts << "Which tasks are overdue?"
+        prompts << "What are my highest-priority tasks?"
+      end
+    
+      fallback_prompts = [
+        "What should I focus on today?",
+        "What information is available in my CRM?",
+        "Help me review my client workload.",
+        "What should I follow up on next?"
+      ]
+
+      (prompts + fallback_prompts).uniq.first(4)
+
+
+    end
 end

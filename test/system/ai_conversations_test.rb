@@ -52,4 +52,25 @@ class AiConversationsTest < ApplicationSystemTestCase
 
     assert_not AiConversation.exists?(conversation.id)
   end
+
+  test "suggested prompt fills the message field" do
+    client = @user.clients.create!(
+      name: "Test Client",
+      email: "client@example.com",
+      company: "Test Company",
+      phone: "555-123-4567",
+      notes: "Test client notes"
+    )
+  
+    conversation = @user.ai_conversations.create!(
+      title: "Test Conversation"
+    )
+  
+    visit ai_conversation_path(conversation)
+  
+    click_on "Summarize my current clients."
+  
+    assert_field "content",
+                 with: "Summarize my current clients."
+  end
 end

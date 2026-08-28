@@ -27,4 +27,15 @@ class ApplicationHelperTest < ActionView::TestCase
 
     assert_not_includes result, "<script>"
   end
+
+  test "returns up to four suggested prompts" do
+    user = users(:one)
+  
+    prompts = ai_suggested_prompts(user)
+  
+    assert prompts.length <= 4
+  
+    assert_includes prompts,
+                    "Summarize my current clients."
+  end
 end
