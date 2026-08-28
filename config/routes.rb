@@ -67,7 +67,7 @@ Rails.application.routes.draw do
 
   resources :ai_conversations,
           path: "assistant/conversations",
-          only: %i[index show create] do
+          only: %i[index show create update destroy] do
     resources :ai_messages, only: :create
   end
 
