@@ -6,7 +6,7 @@
   <div class="mt-8 space-y-4">
     <% @messages.each do |message| %>
       <div class="<%= message.role == "user" ? "ml-auto bg-emerald-600 text-white" : "mr-auto bg-slate-100 text-slate-900" %> max-w-2xl rounded-2xl px-5 py-4">
-        <%= simple_format(message.content) %>
+        <%= markdown(message.content) %>
       </div>
     <% end %>
   </div>

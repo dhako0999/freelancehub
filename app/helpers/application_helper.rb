@@ -32,4 +32,21 @@ module ApplicationHelper
     def task_due_soon?(task)
         task.due_date.present? && Date.current >= task.due_date - 2.days && Date.current <= task.due_date && task.status != "Completed"
     end
+
+    def markdown(text)
+      html = Kramdown::Document.new(text.to_s).to_html
+  
+      sanitize(
+        html,
+        tags: %w[
+          p br strong em
+          h1 h2 h3 h4
+          ul ol li
+          blockquote
+          code pre
+          a
+        ],
+        attributes: %w[href title]
+      )
+    end
 end
