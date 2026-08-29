@@ -90,11 +90,11 @@ test:
 production:
   primary:
     <<: *default
-    url: "<%= ENV.fetch("DATABASE_URL") %>"
+    url: "<%= ENV["SECRET_KEY_BASE_DUMMY"] ? "postgresql://localhost/dummy" : ENV.fetch("DATABASE_URL") %>"
 
   cache:
     <<: *default
-    url: "<%= ENV.fetch("CACHE_DATABASE_URL") %>"
+    url: "<%= ENV["SECRET_KEY_BASE_DUMMY"] ? "postgresql://localhost/dummy_cache" : ENV.fetch("CACHE_DATABASE_URL") %>"
     migrations_paths: db/cache_migrate
 
 
