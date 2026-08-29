@@ -133,4 +133,78 @@ class AiMessagesControllerTest < ActionDispatch::IntegrationTest
   
     fake_assistant.verify
   end
+
+  test "streams assistant response and saves messages" do
+    conversation = @user.ai_conversations.create!(
+      title: "Streaming Test"
+    )
+  
+    fake_assistant = Object.new
+  
+    fake_assistant.define_singleton_method(:stream_answer) do |question, &block|
+      raise "Unexpected question" unless question == "What should I focus on today?"
+  
+      block.call("Focus")
+      block.call(" on")
+      block.call(" your highest-priority tasks.")
+    end
+  
+    Ai::ClientAssistant.stub :new, fake_assistant do
+      post stream_ai_conversation_ai_messages_url(conversation),
+           params: {
+             content: "What should I focus on today?"
+           }
+    end
+  
+    assert_response :success
+  
+    assert_equal 2, conversation.ai_messages.count
+  
+    user_message = conversation.ai_messages.order(:created_at).first
+    assistant_message = conversation.ai_messages.order(:created_at).last
+  
+    assert_equal "user", user_message.role
+  
+    assert_equal(
+      "What should I focus on today?",
+      user_message.content
+    )
+  
+    assert_equal "assistant", assistant_message.role
+  
+    assert_equal(
+      "Focus on your highest-priority tasks.",
+      assistant_message.content
+    )
+  end
+
+  test "streams an error event when OpenAI fails" do
+    conversation = @user.ai_conversations.create!(
+      title: "Streaming Error Test"
+    )
+  
+    fake_assistant = Object.new
+  
+    fake_assistant.define_singleton_method(:stream_answer) do |_question, &_block|
+      raise OpenAI::Errors::APIError.new(
+        url: "https://api.openai.com/v1/responses",
+        message: "Test streaming failure"
+      )
+    end
+  
+    Ai::ClientAssistant.stub :new, fake_assistant do
+      post stream_ai_conversation_ai_messages_url(conversation),
+           params: {
+             content: "What should I focus on today?"
+           }
+    end
+  
+    assert_response :success
+  
+    assert_includes response.body, "event: error"
+    assert_includes(
+      response.body,
+      "The AI assistant is temporarily unavailable."
+    )
+  end
 end

@@ -52,6 +52,31 @@ module Ai
       response.output_text.strip
     end
 
+    def stream_answer(question, &block)
+      stream = @client.responses.stream(
+        model: "gpt-5.2",
+        input: [
+          {
+            role: "system",
+            content: system_prompt
+          },
+          *conversation_history,
+          {
+            role: "user",
+            content: question
+          }
+        ]
+      )
+    
+      stream.each do |event|
+        next unless event.is_a?(
+          OpenAI::Streaming::ResponseTextDeltaEvent
+        )
+    
+        block.call(event.delta)
+      end
+    end
+
     private
 
     def conversation_history

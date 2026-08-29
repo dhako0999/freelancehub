@@ -65,10 +65,18 @@ Rails.application.routes.draw do
   post "assistant",
       to: "assistant#create"
 
-  resources :ai_conversations,
-          path: "assistant/conversations",
-          only: %i[index show create update destroy] do
-    resources :ai_messages, only: :create
-  end
+      resources :ai_conversations,
+                path: "assistant/conversations",
+                only: %i[index show create update destroy] do
+          resources :ai_messages, only: :create do
+            collection do
+              post :stream
+            end
+
+            member do
+              get :rendered
+            end
+          end
+      end
 
 end
