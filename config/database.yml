@@ -90,11 +90,11 @@ test:
 production:
   primary:
     <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    url: "<%= ENV.fetch("DATABASE_URL") %>"
 
   cache:
     <<: *default
-    url: <%= ENV["CACHE_DATABASE_URL"] %>
+    url: "<%= ENV.fetch("CACHE_DATABASE_URL") %>"
     migrations_paths: db/cache_migrate
 
 
