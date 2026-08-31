@@ -87,14 +87,13 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 
+
 production:
   primary:
     <<: *default
-    url: "<%= ENV["SECRET_KEY_BASE_DUMMY"] ? "postgresql://localhost/dummy" : ENV.fetch("DATABASE_URL") %>"
+    url: <%= ENV["DATABASE_URL"] %>
 
   cache:
     <<: *default
-    url: "<%= ENV["SECRET_KEY_BASE_DUMMY"] ? "postgresql://localhost/dummy_cache" : ENV.fetch("CACHE_DATABASE_URL") %>"
+    url: <%= ENV["CACHE_DATABASE_URL"] %>
     migrations_paths: db/cache_migrate
-
-
